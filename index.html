@@ -102,6 +102,124 @@
     mask-image: radial-gradient(800px 520px at 50% 0%, #000 30%, transparent 75%);
   }
 
+  /* ---------- Background bokeh (drifting particles) ---------- */
+  .bg-bokeh {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .bg-bokeh::before, .bg-bokeh::after {
+    content: ""; position: absolute; inset: -20%;
+    background:
+      radial-gradient(6px 6px at 12% 22%, rgba(91,140,255,0.55), transparent 60%),
+      radial-gradient(5px 5px at 78% 18%, rgba(124,92,255,0.45), transparent 60%),
+      radial-gradient(4px 4px at 32% 68%, rgba(91,140,255,0.35), transparent 60%),
+      radial-gradient(7px 7px at 88% 72%, rgba(124,92,255,0.30), transparent 60%),
+      radial-gradient(3px 3px at 55% 38%, rgba(255,255,255,0.18), transparent 60%),
+      radial-gradient(4px 4px at 8% 82%, rgba(91,140,255,0.28), transparent 60%);
+    animation: drift 28s ease-in-out infinite;
+  }
+  .bg-bokeh::after {
+    background:
+      radial-gradient(3px 3px at 22% 48%, rgba(124,92,255,0.35), transparent 60%),
+      radial-gradient(5px 5px at 66% 12%, rgba(91,140,255,0.30), transparent 60%),
+      radial-gradient(4px 4px at 42% 86%, rgba(255,255,255,0.16), transparent 60%),
+      radial-gradient(6px 6px at 94% 48%, rgba(124,92,255,0.30), transparent 60%);
+    animation: drift 42s ease-in-out infinite reverse;
+    opacity: .7;
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50%      { transform: translate3d(40px, -30px, 0); }
+  }
+
+  /* ---------- App preview section ---------- */
+  .preview-sec { padding: 28px 0 44px; text-align: center; }
+  .preview-stage {
+    position: relative; perspective: 1200px;
+    margin: 0 auto; max-width: 920px;
+  }
+  .preview-glow {
+    position: absolute; inset: -12% -6%;
+    background: radial-gradient(60% 55% at 50% 50%, rgba(91,140,255,0.22), transparent 70%);
+    filter: blur(10px); z-index: -1;
+    animation: glowPulse 6s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: .85; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.05); }
+  }
+  .preview-frame {
+    position: relative; border-radius: 16px; overflow: hidden;
+    background: var(--panel-2);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(91,140,255,0.12),
+      0 0 60px rgba(91,140,255,0.12);
+    transition: transform .25s ease, box-shadow .25s ease;
+    will-change: transform;
+    animation: floatY 7s ease-in-out infinite;
+  }
+  .preview-frame:hover {
+    box-shadow:
+      0 40px 100px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(91,140,255,0.25),
+      0 0 90px rgba(91,140,255,0.2);
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  /* 动画渐变光边（conic + mask） */
+  .preview-frame::before {
+    content: ""; position: absolute; inset: -1px; border-radius: 16px; padding: 1px;
+    background: conic-gradient(from 0deg,
+      rgba(91,140,255,0.6), rgba(124,92,255,0.6),
+      rgba(91,140,255,0.15), rgba(124,92,255,0.5),
+      rgba(91,140,255,0.6));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: spin 9s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .preview-chrome {
+    display: flex; align-items: center; gap: 7px;
+    padding: 11px 14px; background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .preview-chrome .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .preview-chrome .dot.red    { background: #ff5f57; }
+  .preview-chrome .dot.yellow { background: #febc2e; }
+  .preview-chrome .dot.green  { background: #28c840; }
+  .preview-title {
+    margin-left: 12px; font-size: 12px; color: var(--text-faint);
+  }
+  .preview-img { display: block; width: 100%; height: auto; }
+
+  /* ---------- Hero badge dot pulse ---------- */
+  .badge .dot { animation: pulseDot 2.2s ease-in-out infinite; }
+  @keyframes pulseDot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(70,211,154,0.6); }
+    50%      { box-shadow: 0 0 0 6px rgba(70,211,154,0); }
+  }
+
+  /* ---------- Cards subtle hover lift ---------- */
+  .fcard { transition: transform .22s ease, border-color .22s ease; }
+  .fcard:hover { transform: translateY(-3px); border-color: rgba(91,140,255,0.3); }
+  .pcard:hover { transform: translateY(-3px); border-color: rgba(91,140,255,0.35); }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .bg-bokeh::before, .bg-bokeh::after,
+    .preview-frame, .preview-glow, .preview-frame::before,
+    .badge .dot { animation: none !important; }
+  }
+
   .content { position: relative; z-index: 1; }
 
   /* ---------- Nav ---------- */
@@ -268,6 +386,7 @@
 <body>
 <div class="bg-glow"></div>
 <div class="bg-grid"></div>
+<div class="bg-bokeh" aria-hidden="true"></div>
 
 <div class="content">
   <!-- Nav -->
@@ -307,6 +426,26 @@
       </a>
     </div>
   </header>
+
+  <!-- Preview -->
+  <section class="wrap preview-sec" id="preview">
+    <div class="sec-head reveal" data-reveal>
+      <h2>看看实际界面</h2>
+      <p>原生桌面体验，开箱即用——和你熟悉的 Web 端一脉相承。</p>
+    </div>
+    <div class="preview-stage reveal" data-reveal>
+      <div class="preview-glow" aria-hidden="true"></div>
+      <div class="preview-frame" id="preview-frame">
+        <div class="preview-chrome">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="preview-title">DSH Desktop · DeepSeek Harness</span>
+        </div>
+        <img class="preview-img" src="app-preview.png" alt="DSH Desktop 应用界面预览" loading="lazy" />
+      </div>
+    </div>
+  </section>
 
   <!-- Download -->
   <section class="wrap" id="download">
@@ -445,6 +584,11 @@
             <a href="https://github.com/anywhere-labs/deepseek-harness-desktop" target="_blank" rel="noopener">GitHub 仓库</a>
             <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/user-guide.md" target="_blank" rel="noopener">用户指南</a>
             <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/faq.md" target="_blank" rel="noopener">常见问题</a>
+          </div>
+          <div class="foot-col">
+            <h4>官方</h4>
+            <a href="https://www.dshdesktop.cn/" target="_blank" rel="noopener">魔方官网</a>
+            <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/releases" target="_blank" rel="noopener">发布历史</a>
           </div>
         </div>
       </div>
@@ -644,6 +788,42 @@
         setTimeout(function () { sh.classList.remove("show"); }, 3200);
       }
     }
+  })();
+  // 3) 滚动渐显（IntersectionObserver）
+  (function () {
+    var items = document.querySelectorAll(".reveal");
+    if (!items.length) return;
+    if (!("IntersectionObserver" in window)) {
+      for (var i = 0; i < items.length; i++) items[i].classList.add("in");
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    for (var k = 0; k < items.length; k++) io.observe(items[k]);
+  })();
+
+  // 4) 应用预览：跟随鼠标的轻微视差倾斜（仅桌面，触屏忽略）
+  (function () {
+    var f = document.getElementById("preview-frame");
+    if (!f) return;
+    if (matchMedia("(hover: none)").matches) return;
+    var stage = f.parentElement;
+    var raf = 0;
+    stage.addEventListener("mousemove", function (e) {
+      var r = stage.getBoundingClientRect();
+      var dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      var dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      var tx = "perspective(1200px) rotateX(" + (-dy * 5) + "deg) rotateY(" + (dx * 6) + "deg) translateY(-4px)";
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(function () { f.style.transform = tx; });
+    });
+    stage.addEventListener("mouseleave", function () {
+      if (raf) cancelAnimationFrame(raf);
+      f.style.transform = "";
+    });
   })();
 </script>
 </body>
