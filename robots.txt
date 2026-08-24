@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gun.l.cd/sitemap.xml
+Sitemap: https://dsh.966887.xyz/sitemap.xml
