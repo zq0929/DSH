@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DSH Desktop 下载 | DeepSeek Harness 开源桌面客户端 (Windows / macOS)</title>
+<meta name="description" content="DSH Desktop（DeepSeek Harness Desktop）是基于 DeepSeek Harness 构建的开源 Windows / macOS 桌面客户端，一键下载、开箱即用，原生桌面集成 + 插件市场。支持国内镜像加速下载。" />
+<meta name="keywords" content="DSH Desktop, DeepSeek Harness, 桌面客户端, 下载, Windows, macOS, 开源, 插件" />
+<meta name="author" content="DSH Desktop 社区" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="theme-color" content="#0a0c12" />
+
+<!-- 规范链接：上线后请把 https://你的域名.example/ 换成真实域名（仅保留一个首选地址，避免重复内容） -->
+<link rel="canonical" href="https://你的域名.example/" />
+
+<!-- Open Graph（微信/Telegram/Slack 等分享卡片） -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="DSH Desktop" />
+<meta property="og:title" content="DSH Desktop 下载 | DeepSeek Harness 开源桌面客户端" />
+<meta property="og:description" content="基于 DeepSeek Harness 的开源 Windows / macOS 桌面客户端，一键下载、开箱即用，支持国内镜像加速。" />
+<meta property="og:url" content="https://你的域名.example/" />
+<meta property="og:image" content="https://你的域名.example/og-cover.png" />
+<meta property="og:locale" content="zh_CN" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="DSH Desktop 下载 | DeepSeek Harness 开源桌面客户端" />
+<meta name="twitter:description" content="基于 DeepSeek Harness 的开源 Windows / macOS 桌面客户端，一键下载、支持国内镜像加速。" />
+<meta name="twitter:image" content="https://你的域名.example/og-cover.png" />
+
+<!-- 结构化数据：帮助 Google / Bing 理解这是一款软件，可能展示富媒体结果 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "DSH Desktop",
+  "alternateName": "DeepSeek Harness Desktop",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": ["Windows", "macOS"],
+  "softwareVersion": "2.0.2",
+  "datePublished": "2026-08-21",
+  "description": "基于 DeepSeek Harness 构建的开源 Windows / macOS 桌面客户端，原生桌面集成、插件市场，支持国内镜像加速下载。",
+  "url": "https://你的域名.example/",
+  "downloadUrl": "https://github.com/anywhere-labs/deepseek-harness-desktop/releases",
+  "author": { "@type": "Organization", "name": "DSH Desktop 社区" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "0", "ratingCount": "0" }
+}
+</script>
+<style>
+  :root {
+    --bg: #0a0c12;
+    --bg-soft: #11141d;
+    --panel: #161a26;
+    --panel-2: #1c2130;
+    --border: #2a3042;
+    --text: #e8ecf4;
+    --text-dim: #9aa4ba;
+    --text-faint: #6b7490;
+    --accent: #5b8cff;
+    --accent-2: #7c5cff;
+    --accent-glow: rgba(91, 140, 255, 0.35);
+    --win: #4fa4ff;
+    --mac: #c9d2e3;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --maxw: 1080px;
+    font-synthesis: none;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+
+  /* ---------- Background decoration ---------- */
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(620px 420px at 18% -8%, rgba(91,140,255,0.18), transparent 70%),
+      radial-gradient(560px 420px at 88% 4%, rgba(124,92,255,0.16), transparent 70%);
+  }
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .35;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(800px 520px at 50% 0%, #000 30%, transparent 75%);
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px);
+    background: rgba(10,12,18,0.72);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 11px; font-weight: 700; font-size: 17px; letter-spacing: .2px; }
+  .brand .logo {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 15px;
+    box-shadow: 0 6px 18px var(--accent-glow);
+  }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--text-dim); font-size: 14px; transition: color .18s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-gh {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid var(--border); padding: 7px 13px; border-radius: 9px;
+    font-size: 13px; color: var(--text); transition: border-color .18s, background .18s;
+  }
+  .nav-gh:hover { border-color: var(--accent); background: rgba(91,140,255,0.08); }
+  @media (max-width: 720px) { .nav-links a:not(.nav-gh) { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero { text-align: center; padding: 84px 0 56px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 6px 14px; margin-bottom: 26px; background: var(--panel);
+  }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #46d39a; box-shadow: 0 0 10px #46d39a; }
+  h1 {
+    font-size: clamp(34px, 6vw, 58px); line-height: 1.08; font-weight: 800; letter-spacing: -0.5px;
+    margin-bottom: 18px;
+  }
+  h1 .grad {
+    background: linear-gradient(100deg, var(--accent), var(--accent-2) 70%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { font-size: clamp(15px, 2.4vw, 18px); color: var(--text-dim); max-width: 640px; margin: 0 auto 14px; }
+  .tagline { color: var(--text-faint); font-size: 14px; margin-bottom: 36px; }
+
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 26px; border-radius: 12px; font-size: 15px; font-weight: 650;
+    border: 1px solid transparent; cursor: pointer; transition: transform .12s, box-shadow .2s, background .2s, border-color .2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff; box-shadow: 0 10px 30px var(--accent-glow);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px var(--accent-glow); }
+  .btn-ghost { background: var(--panel); border-color: var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); background: var(--panel-2); }
+  .btn svg { width: 19px; height: 19px; }
+
+  /* ---------- Section ---------- */
+  section { padding: 56px 0; }
+  .sec-head { text-align: center; margin-bottom: 34px; }
+  #more-downloads { padding-top: 64px; }
+  .sec-head h2 { font-size: 26px; font-weight: 750; margin-bottom: 8px; }
+  .sec-head p { color: var(--text-dim); font-size: 15px; }
+
+  /* ---------- Platform cards ---------- */
+  .platforms { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 680px) { .platforms { grid-template-columns: 1fr; } }
+  .pcard {
+    position: relative; background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px; transition: border-color .2s, transform .2s, box-shadow .2s;
+    overflow: hidden;
+  }
+  .pcard.recommend { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 18px 50px rgba(91,140,255,0.14); }
+  .pcard:hover { transform: translateY(-3px); }
+  .pcard .ribbon {
+    position: absolute; top: 16px; right: 16px; font-size: 11px; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 3px 10px; display: none;
+  }
+  .pcard.recommend .ribbon { display: inline-block; }
+  .pcard .p-top { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .p-icon {
+    width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--panel-2); border: 1px solid var(--border);
+  }
+  .p-icon svg { width: 26px; height: 26px; }
+  .p-name { font-size: 18px; font-weight: 700; }
+  .p-meta { font-size: 13px; color: var(--text-faint); }
+  .pcard .btn { width: 100%; justify-content: center; margin-top: 6px; }
+  .p-link {
+    display: block; text-align: center; font-size: 12.5px; color: var(--text-faint);
+    margin-top: 12px; transition: color .18s;
+  }
+  .p-link:hover { color: var(--accent); }
+
+  /* ---------- Download channel switch ---------- */
+  .channel {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    justify-content: center; margin-bottom: 12px;
+  }
+  .channel-label { font-size: 13px; color: var(--text-faint); }
+  .seg {
+    display: inline-flex; flex-wrap: wrap; gap: 6px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 11px; padding: 5px;
+  }
+  .seg-btn {
+    border: 0; background: transparent; color: var(--text-dim);
+    font-size: 13px; padding: 7px 14px; border-radius: 8px; cursor: pointer;
+    font-family: inherit; transition: background .15s, color .15s;
+  }
+  .seg-btn:hover { color: var(--text); }
+  .seg-btn.is-active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; box-shadow: 0 6px 18px var(--accent-glow); }
+  .channel-hint { text-align: center; font-size: 12.5px; color: var(--text-faint); margin: 4px 0 30px; }
+  .channel-hint b { color: var(--text-dim); font-weight: 600; }
+
+  /* ---------- Features ---------- */
+  .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 680px) { .features { grid-template-columns: 1fr; } }
+  .fcard { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+  .fcard h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 9px; }
+  .fcard .f-ico { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center;
+    background: linear-gradient(135deg, rgba(91,140,255,0.18), rgba(124,92,255,0.18)); border: 1px solid var(--border); }
+  .fcard .f-ico svg { width: 17px; height: 17px; color: var(--accent); }
+  .fcard p { font-size: 14px; color: var(--text-dim); }
+  .soon { font-size: 11px; color: var(--accent-2); border: 1px solid var(--accent-2); border-radius: 999px; padding: 1px 8px; margin-left: 4px; }
+
+  /* ---------- Other downloads ---------- */
+  .other { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px 28px; }
+  .other h3 { font-size: 16px; margin-bottom: 14px; }
+  .other ul { list-style: none; display: grid; gap: 10px; }
+  .other li { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 14px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .other li span { font-size: 14px; color: var(--text-dim); }
+  .other li a { font-size: 13.5px; color: var(--accent); white-space: nowrap; }
+  .other li a:hover { text-decoration: underline; }
+
+  /* ---------- Footer ---------- */
+  footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 36px 0 50px; margin-top: 30px; }
+  .foot-grid { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: flex-start; }
+  .foot-brand { max-width: 380px; }
+  .foot-brand .brand { margin-bottom: 12px; }
+  .disclaimer { font-size: 12.5px; color: var(--text-faint); line-height: 1.7; }
+  .foot-links { display: flex; gap: 32px; flex-wrap: wrap; }
+  .foot-col h4 { font-size: 13px; color: var(--text-dim); margin-bottom: 10px; }
+  .foot-col a { display: block; font-size: 13px; color: var(--text-faint); margin-bottom: 7px; transition: color .18s; }
+  .foot-col a:hover { color: var(--accent); }
+  .copyright { margin-top: 30px; font-size: 12px; color: var(--text-faint); text-align: center; }
+
+  .sync-hint {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--text-dim);
+    padding: 9px 14px; border-radius: 999px; font-size: 12.5px;
+    opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s; z-index: 100;
+  }
+  .sync-hint.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="bg-grid"></div>
+
+<div class="content">
+  <!-- Nav -->
+  <nav>
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">
+        <span class="logo">DS</span>
+        <span>DSH Desktop</span>
+      </a>
+      <div class="nav-links">
+        <a href="#download">下载</a>
+        <a href="#features">功能</a>
+        <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/user-guide.md" target="_blank" rel="noopener">用户指南</a>
+        <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/faq.md" target="_blank" rel="noopener">常见问题</a>
+        <a class="nav-gh" href="https://github.com/anywhere-labs/deepseek-harness-desktop" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero wrap" id="top">
+    <span class="badge" id="version-badge"><span class="dot"></span> 正在同步最新版本…</span>
+    <h1>为 DeepSeek Harness 打造的<br /><span class="grad">现代化桌面客户端</span></h1>
+    <p class="sub">DSH Desktop 把 DeepSeek Harness 的本地 Web UI、Host 服务与插件系统，整合进原生 Windows / macOS 桌面应用。一键下载，开箱即用。</p>
+    <p class="tagline">万物皆「插件」，桌面本身也是「插件」。</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" id="hero-cta" href="#download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+        下载最新版
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/anywhere-labs/deepseek-harness-desktop" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        在 GitHub 查看
+      </a>
+    </div>
+  </header>
+
+  <!-- Download -->
+  <section class="wrap" id="download">
+    <div class="sec-head">
+      <h2>选择你的平台</h2>
+      <p>当前正式安装包支持 Windows x64 与 macOS Universal，无需额外环境。</p>
+    </div>
+    <!-- Download channel switch -->
+    <div class="channel">
+      <span class="channel-label">下载通道</span>
+      <div class="seg" id="channel-seg" role="group" aria-label="下载通道">
+        <button type="button" class="seg-btn" data-channel="official">GitHub 官方</button>
+        <button type="button" class="seg-btn" data-channel="ghfast.top">ghfast.top</button>
+        <button type="button" class="seg-btn" data-channel="v6.gh-proxy.org">v6.gh-proxy.org</button>
+        <button type="button" class="seg-btn" data-channel="hk.gh-proxy.org">hk.gh-proxy.org</button>
+        <button type="button" class="seg-btn" data-channel="cdn.gh-proxy.org">cdn.gh-proxy.org</button>
+        <button type="button" class="seg-btn" data-channel="edgeone.gh-proxy.org">edgeone.gh-proxy.org</button>
+      </div>
+    </div>
+    <p class="channel-hint" id="channel-hint"></p>
+    <div class="platforms">
+      <!-- Windows -->
+      <div class="pcard" id="card-win" data-os="win">
+        <span class="ribbon">为你推荐</span>
+        <div class="p-top">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.1 10.3 4.3v7.1H3V5.1zm0 8.1h7.3v7.1L3 19.3V13.2zm8.7-9.1L21 3v9.4h-9.3V4.1zM21 13.6V21l-9.3-1.3v-6.1H21z"/></svg>
+          </div>
+          <div>
+            <div class="p-name">Windows</div>
+            <div class="p-meta">x64 · NSIS 安装程序 · .exe</div>
+          </div>
+        </div>
+        <a id="btn-windows" class="btn btn-primary" data-asset data-official="https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.2/DSH-Desktop-2.0.2-x64-Setup.exe" href="https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.2/DSH-Desktop-2.0.2-x64-Setup.exe" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          下载 Windows 版
+        </a>
+        <a class="p-link" href="https://www.dshdesktop.cn/api/downloads/windows" target="_blank" rel="noopener">备用下载通道（官网）</a>
+      </div>
+
+      <!-- macOS -->
+      <div class="pcard" id="card-mac" data-os="mac">
+        <span class="ribbon">为你推荐</span>
+        <div class="p-top">
+          <div class="p-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c.02 2.46 2.16 3.28 2.18 3.29-.02.06-.34 1.16-1.12 2.3-.68.98-1.38 1.95-2.49 1.97-1.09.02-1.44-.64-2.69-.64-1.25 0-1.64.62-2.67.66-1.07.04-1.89-1.07-2.57-2.05-1.4-2-2.47-5.64-1.03-8.1.71-1.22 1.98-1.99 3.36-2.01 1.05-.02 2.04.71 2.69.71.65 0 1.87-.88 3.15-.75.54.02 2.04.22 3.01 1.63-.08.05-1.78 1.04-1.76 3.1zM14.4 5.6c.58-.7.97-1.67.86-2.6-.83.03-1.84.55-2.44 1.25-.54.62-1.01 1.61-.88 2.52.92.07 1.87-.47 2.46-1.17z"/></svg>
+          </div>
+          <div>
+            <div class="p-name">macOS</div>
+            <div class="p-meta">Universal · 支持 Apple Silicon 与 Intel · .dmg</div>
+          </div>
+        </div>
+        <a id="btn-macos" class="btn btn-primary" data-asset data-official="https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.2/DSH.Desktop-2.0.2-universal.dmg" href="https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.2/DSH.Desktop-2.0.2-universal.dmg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          下载 macOS 版
+        </a>
+        <a class="p-link" href="https://www.dshdesktop.cn/api/downloads/mac" target="_blank" rel="noopener">备用下载通道（官网）</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="wrap" id="features">
+    <div class="sec-head">
+      <h2>主要功能</h2>
+      <p>把本地 AI 能力，收进一个干净的桌面窗口。</p>
+    </div>
+    <div class="features">
+      <div class="fcard">
+        <h3><span class="f-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>原生桌面集成</h3>
+        <p>应用自动启动并管理本地 Harness 服务，集成系统托盘与桌面窗口，无需安装 Node.js，也无需执行命令。</p>
+      </div>
+      <div class="fcard">
+        <h3><span class="f-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>插件市场（已内置）</h3>
+        <p>DSH Community Market 已完成并内置，提供插件发现、详情、安装与管理，以开放方式连接各种插件数据源。</p>
+      </div>
+      <div class="fcard">
+        <h3><span class="f-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span>手机远程控制<span class="soon">即将推出</span></h3>
+        <p>通过 iOS 与 Android 远程连接 Desktop，在手机上发起任务、查看 Agent 进度，并在需要时继续跟进。</p>
+      </div>
+      <div class="fcard">
+        <h3><span class="f-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>共建插件生态</h3>
+        <p>上游插件、DSH Desktop 插件与社区插件遵循统一约定，可通过相同组合机制协同工作，欢迎加入共建。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other downloads -->
+  <section class="wrap" id="more-downloads">
+    <div class="other">
+      <h3>其他下载与历史版本</h3>
+      <ul>
+        <li>
+          <span>所有 Release 版本（含 v2.0.1 / v2.0.0 / v0.1.0）</span>
+          <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/releases" target="_blank" rel="noopener">前往 Releases →</a>
+        </li>
+        <li>
+          <span>macOS v2.0.0（仅 Apple Silicon，arm64）</span>
+          <a data-asset data-official="https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.0/DSH-Desktop-2.0.0-arm64.dmg" href="https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.0/DSH-Desktop-2.0.0-arm64.dmg" target="_blank" rel="noopener">下载 .dmg →</a>
+        </li>
+        <li>
+          <span>源码仓库（自行编译）</span>
+          <a href="https://github.com/anywhere-labs/deepseek-harness-desktop" target="_blank" rel="noopener">查看源码 →</a>
+        </li>
+        <li>
+          <span>用户指南 / 常见问题</span>
+          <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/user-guide.md" target="_blank" rel="noopener">文档 →</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a class="brand" href="#top">
+            <span class="logo">DS</span>
+            <span>DSH Desktop</span>
+          </a>
+          <p class="disclaimer">
+            DSH Desktop 是基于 DeepSeek Harness 与 Cordis 插件思想构建的独立社区开源项目，旨在提供开放、可组合的 DSH 桌面体验。
+            本项目与深度求索不存在隶属、合作、授权或背书关系。
+          </p>
+        </div>
+        <div class="foot-links">
+          <div class="foot-col">
+            <h4>下载</h4>
+            <a href="#download">Windows x64</a>
+            <a href="#download">macOS Universal</a>
+            <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/releases" target="_blank" rel="noopener">历史版本</a>
+          </div>
+          <div class="foot-col">
+            <h4>资源</h4>
+            <a href="https://github.com/anywhere-labs/deepseek-harness-desktop" target="_blank" rel="noopener">GitHub 仓库</a>
+            <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/user-guide.md" target="_blank" rel="noopener">用户指南</a>
+            <a href="https://github.com/anywhere-labs/deepseek-harness-desktop/blob/master/docs/faq.md" target="_blank" rel="noopener">常见问题</a>
+          </div>
+        </div>
+      </div>
+      <p class="copyright">DSH Desktop · 开源社区项目 · 本页为下载入口，非深度求索官方页面</p>
+    </div>
+  </footer>
+</div>
+
+<div class="sync-hint" id="sync-hint">已自动同步至最新版本</div>
+
+<script>
+  // 1) 平台识别：给当前系统对应的下载卡片加「为你推荐」高亮
+  (function () {
+    var plat = "unknown";
+    if (navigator.userAgentData && navigator.userAgentData.platform) {
+      plat = navigator.userAgentData.platform.toLowerCase();
+    } else if (navigator.platform) {
+      plat = navigator.platform.toLowerCase();
+    } else {
+      plat = (navigator.userAgent || "").toLowerCase();
+    }
+    var card = /win/.test(plat) ? document.getElementById("card-win")
+             : /mac/.test(plat) ? document.getElementById("card-mac")
+             : null;
+    if (card) card.classList.add("recommend");
+  })();
+
+  // 2) 下载通道（官方直连 / 公共镜像）：切换后改写所有下载链接
+  var CHANNELS = {
+    official:                 "",
+    "ghfast.top":             "https://ghfast.top/",
+    "v6.gh-proxy.org":        "https://v6.gh-proxy.org/",
+    "hk.gh-proxy.org":        "https://hk.gh-proxy.org/",
+    "cdn.gh-proxy.org":       "https://cdn.gh-proxy.org/",
+    "edgeone.gh-proxy.org":   "https://edgeone.gh-proxy.org/"
+  };
+  var CHANNEL_KEY = "dsh-download-channel";
+  var currentChannel = "official";
+
+  function loadChannel() {
+    try {
+      var c = localStorage.getItem(CHANNEL_KEY);
+      if (c && Object.prototype.hasOwnProperty.call(CHANNELS, c)) currentChannel = c;
+    } catch (e) {}
+  }
+  // 把官方 github 资源 URL 经过镜像前缀转发（镜像 = base + 完整官方URL）
+  function proxyUrl(url, channel) {
+    var base = CHANNELS[channel] || "";
+    if (!base) return url;
+    if (/^https:\/\/(github\.com|api\.github\.com|raw\.githubusercontent\.com|objects\.githubusercontent\.com)\//i.test(url)) {
+      return base + url;
+    }
+    return url;
+  }
+  // 标记并设置一个「下载资源」链接（记录官方地址 + 按当前通道改写）
+  function setAssetLink(el, officialUrl) {
+    if (!el || !officialUrl) return;
+    el.setAttribute("data-asset", "");
+    el.dataset.official = officialUrl;
+    el.href = proxyUrl(officialUrl, currentChannel);
+  }
+  // 应用某通道到所有 data-asset 链接 + 更新 UI 高亮与提示
+  function applyChannel(channel, persist) {
+    if (!Object.prototype.hasOwnProperty.call(CHANNELS, channel)) channel = "official";
+    currentChannel = channel;
+    if (persist) { try { localStorage.setItem(CHANNEL_KEY, channel); } catch (e) {} }
+    var nodes = document.querySelectorAll("[data-asset]");
+    for (var i = 0; i < nodes.length; i++) {
+      var off = nodes[i].dataset.official;
+      if (off) nodes[i].href = proxyUrl(off, channel);
+    }
+    var btns = document.querySelectorAll("#channel-seg .seg-btn");
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].classList.toggle("is-active", btns[j].getAttribute("data-channel") === channel);
+    }
+    var hint = document.getElementById("channel-hint");
+    if (hint) {
+      if (channel === "official") {
+        hint.innerHTML = '直连 GitHub；国内若下载慢，可切换到 <b>镜像加速</b>（第三方公共服务，下载经其中转）。';
+      } else {
+        hint.innerHTML = '当前通道：<b>' + channel + '</b>（第三方镜像，下载经其中转）。某个镜像不可用或超时，请换回官方或其它镜像。';
+      }
+    }
+  }
+  (function bindChannelUI() {
+    loadChannel();
+    var seg = document.getElementById("channel-seg");
+    if (seg) {
+      seg.addEventListener("click", function (e) {
+        var t = e.target;
+        var btn = (t && t.closest) ? t.closest(".seg-btn") : t;
+        if (!btn || !btn.getAttribute) return;
+        var ch = btn.getAttribute("data-channel");
+        if (ch) applyChannel(ch, true);
+      });
+    }
+    applyChannel(currentChannel, false); // 先把已标记的官方链接按已保存通道改写
+  })();
+
+  // 3) 自动同步 GitHub 最新 Release：版本号、发布日期、下载链接
+  //    走 api.github.com（公开仓库支持 CORS，无需 token）
+  //    5 分钟 localStorage 缓存；API 也会按当前通道走镜像兜底
+  (async function syncLatestRelease() {
+    var REPO = "anywhere-labs/deepseek-harness-desktop";
+    var API_BASE = "https://api.github.com/repos/" + REPO + "/releases/latest";
+    var CACHE_KEY = "dsh-latest-release-v1";
+    var CACHE_TTL = 5 * 60 * 1000;
+
+    function getCached() {
+      try {
+        var c = localStorage.getItem(CACHE_KEY);
+        if (!c) return null;
+        var p = JSON.parse(c);
+        if (Date.now() - p.ts < CACHE_TTL) return p.data;
+      } catch (e) {}
+      return null;
+    }
+    function setCached(d) {
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: d })); } catch (e) {}
+    }
+    // 依次尝试：当前通道的镜像 API → 官方 API；都失败再用兜底
+    async function fetchLatest() {
+      var urls = [];
+      if (currentChannel !== "official") urls.push(proxyUrl(API_BASE, currentChannel));
+      urls.push(API_BASE);
+      for (var k = 0; k < urls.length; k++) {
+        try {
+          var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+          var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 8000) : null;
+          var res = await fetch(urls[k], {
+            headers: { "Accept": "application/vnd.github+json" },
+            signal: ctrl ? ctrl.signal : undefined
+          });
+          if (timer) clearTimeout(timer);
+          if (res && res.ok) return await res.json();
+        } catch (e) { /* 试下一个 */ }
+      }
+      return null;
+    }
+
+    // 网络挂了也不至于没东西显示：用页面内置的 v2.0.2 兜底
+    var FALLBACK = {
+      tag_name: "v2.0.2",
+      published_at: "2026-08-21T00:00:00Z",
+      assets: [
+        { name: "DSH-Desktop-2.0.2-x64-Setup.exe", browser_download_url: "https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.2/DSH-Desktop-2.0.2-x64-Setup.exe" },
+        { name: "DSH.Desktop-2.0.2-universal.dmg", browser_download_url: "https://github.com/anywhere-labs/deepseek-harness-desktop/releases/download/v2.0.2/DSH.Desktop-2.0.2-universal.dmg" }
+      ]
+    };
+
+    var data = getCached();
+    var fromNetwork = false;
+    if (!data) {
+      data = await fetchLatest();
+      if (data) { fromNetwork = true; setCached(data); }
+    }
+    if (!data) data = FALLBACK;
+
+    var tag  = (data.tag_name || "").replace(/^v/i, "");
+    var date = (data.published_at || "").slice(0, 10);
+
+    var badge = document.getElementById("version-badge");
+    if (badge && tag) {
+      badge.innerHTML = '<span class="dot"></span> 最新版本 v' + tag + (date ? " · " + date + " 发布" : "");
+    }
+
+    var assets = data.assets || [];
+    function pickExe(a) {
+      return a.find(function (x) { return /\.exe$/i.test(x.name) && /setup/i.test(x.name) && /x64/i.test(x.name); })
+          || a.find(function (x) { return /\.exe$/i.test(x.name) && /setup/i.test(x.name); })
+          || a.find(function (x) { return /\.exe$/i.test(x.name) && /x64/i.test(x.name); })
+          || a.find(function (x) { return /\.exe$/i.test(x.name); });
+    }
+    function pickDmg(a) {
+      return a.find(function (x) { return /\.dmg$/i.test(x.name) && /universal/i.test(x.name); })
+          || a.find(function (x) { return /\.dmg$/i.test(x.name) && /arm64/i.test(x.name); })
+          || a.find(function (x) { return /\.dmg$/i.test(x.name); });
+    }
+    var winAsset = pickExe(assets);
+    var macAsset = pickDmg(assets);
+
+    if (winAsset) setAssetLink(document.getElementById("btn-windows"), winAsset.browser_download_url);
+    if (macAsset) setAssetLink(document.getElementById("btn-macos"), macAsset.browser_download_url);
+
+    // Hero 按钮智能跳到当前平台对应的下载
+    var hero = document.getElementById("hero-cta");
+    if (hero) {
+      var ua = navigator.userAgent || "";
+      var target = /Mac/i.test(ua) ? macAsset : winAsset;
+      if (target) setAssetLink(hero, target.browser_download_url);
+    }
+
+    if (fromNetwork) {
+      var sh = document.getElementById("sync-hint");
+      if (sh) {
+        sh.classList.add("show");
+        setTimeout(function () { sh.classList.remove("show"); }, 3200);
+      }
+    }
+  })();
+</script>
+</body>
+</html>
