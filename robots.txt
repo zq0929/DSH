@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://你的域名.example/sitemap.xml
+Sitemap: https://gun.l.cd/sitemap.xml
